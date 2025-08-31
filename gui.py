@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
-"""
-Windows Patch Manager GUI
-A simple graphical interface for the patch manager.
-"""
+# Prevent __pycache__ creation
+import os
+os.environ['PYTHONDONTWRITEBYTECODE'] = '1'
 
 import tkinter as tk
 from tkinter import ttk, messagebox, scrolledtext, filedialog

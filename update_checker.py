@@ -1,3 +1,7 @@
+# Prevent __pycache__ creation
+import os
+os.environ['PYTHONDONTWRITEBYTECODE'] = '1'
+
 import subprocess
 import re
 from typing import List, Dict, Optional
@@ -45,7 +49,8 @@ class UpdateChecker:
                 capture_output=True,
                 text=True,
                 encoding='utf-8',
-                timeout=30
+                timeout=30,
+                creationflags=subprocess.CREATE_NO_WINDOW
             )
             
             # Winget upgrade with no --accept will show what would be updated
@@ -75,7 +80,8 @@ class UpdateChecker:
                 capture_output=True,
                 text=True,
                 encoding='utf-8',
-                timeout=30
+                timeout=30,
+                creationflags=subprocess.CREATE_NO_WINDOW
             )
             
             if "would like to upgrade" in result.stdout.lower():
@@ -121,7 +127,8 @@ class UpdateChecker:
                 capture_output=True,
                 text=True,
                 encoding='utf-8',
-                timeout=15
+                timeout=15,
+                creationflags=subprocess.CREATE_NO_WINDOW
             )
             
             if result.returncode == 0:
@@ -148,7 +155,8 @@ class UpdateChecker:
                 capture_output=True,
                 text=True,
                 encoding='utf-8',
-                timeout=15
+                timeout=15,
+                creationflags=subprocess.CREATE_NO_WINDOW
             )
             
             if result.returncode == 0:
@@ -174,7 +182,8 @@ class UpdateChecker:
                 capture_output=True,
                 text=True,
                 encoding='utf-8',
-                timeout=15
+                timeout=15,
+                creationflags=subprocess.CREATE_NO_WINDOW
             )
             
             if result.returncode == 0:
@@ -200,7 +209,8 @@ class UpdateChecker:
                 capture_output=True,
                 text=True,
                 encoding='utf-8',
-                timeout=15
+                timeout=15,
+                creationflags=subprocess.CREATE_NO_WINDOW
             )
             
             if result.returncode == 0:

@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""
-Windows Patch Manager Scheduler
-Sets up automatic update checking and installation.
-"""
+
+# Prevent __pycache__ creation
+import os
+os.environ['PYTHONDONTWRITEBYTECODE'] = '1'
 
 import subprocess
 import sys
-import os
 from pathlib import Path
 from datetime import datetime, timedelta
 import xml.etree.ElementTree as ET
@@ -85,7 +84,7 @@ def create_scheduled_task():
             "/f"  # Force overwrite if exists
         ]
         
-        result = subprocess.run(cmd, capture_output=True, text=True)
+        result = subprocess.run(cmd, capture_output=True, text=True, creationflags=subprocess.CREATE_NO_WINDOW)
         
         if result.returncode == 0:
             print("✓ Scheduled task created successfully")
@@ -110,7 +109,8 @@ def remove_scheduled_task():
         result = subprocess.run(
             ["schtasks", "/delete", "/tn", "Windows Patch Manager", "/f"],
             capture_output=True,
-            text=True
+            text=True,
+            creationflags=subprocess.CREATE_NO_WINDOW
         )
         
         if result.returncode == 0:
@@ -130,7 +130,8 @@ def check_task_status():
         result = subprocess.run(
             ["schtasks", "/query", "/tn", "Windows Patch Manager", "/fo", "csv"],
             capture_output=True,
-            text=True
+            text=True,
+            creationflags=subprocess.CREATE_NO_WINDOW
         )
         
         if result.returncode == 0:
@@ -184,9 +185,11 @@ def main():
         script_dir = Path(__file__).parent.absolute()
         script_path = script_dir / "patch_manager.py"
         
+        env = os.environ.copy()
+        env['PYTHONDONTWRITEBYTECODE'] = '1'
         result = subprocess.run([
             sys.executable, str(script_path), "--check-updates", "--no-confirm"
-        ], cwd=script_dir)
+        ], cwd=script_dir, creationflags=subprocess.CREATE_NO_WINDOW, env=env)
         
         if result.returncode == 0:
             print("✓ Update check completed")

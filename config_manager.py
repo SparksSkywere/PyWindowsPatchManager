@@ -1,5 +1,8 @@
-import json
+# Prevent __pycache__ creation
 import os
+os.environ['PYTHONDONTWRITEBYTECODE'] = '1'
+
+import json
 from pathlib import Path
 from typing import Dict, Any
 

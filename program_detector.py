@@ -1,3 +1,7 @@
+# Prevent __pycache__ creation
+import os
+os.environ['PYTHONDONTWRITEBYTECODE'] = '1'
+
 import subprocess
 import json
 import re
@@ -43,7 +47,8 @@ class ProgramDetector:
                 text=True,
                 encoding='utf-8',
                 errors='ignore',  # Ignore encoding errors
-                timeout=120
+                timeout=120,
+                creationflags=subprocess.CREATE_NO_WINDOW
             )
             
             if result.returncode == 0:
@@ -114,7 +119,8 @@ class ProgramDetector:
                         text=True,
                         encoding='utf-8',
                         errors='ignore',  # Ignore encoding errors
-                        timeout=60
+                        timeout=60,
+                        creationflags=subprocess.CREATE_NO_WINDOW
                     )
                     
                     if result.returncode == 0 and result.stdout:
@@ -218,7 +224,8 @@ class ProgramDetector:
                 text=True,
                 encoding='utf-8',
                 errors='ignore',  # Ignore encoding errors
-                timeout=60
+                timeout=60,
+                creationflags=subprocess.CREATE_NO_WINDOW
             )
             
             if result.returncode == 0:

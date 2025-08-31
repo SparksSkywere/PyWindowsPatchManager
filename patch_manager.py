@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
-"""
-Windows Patch Manager
-A comprehensive tool for managing software updates on Windows systems.
-"""
+# Prevent __pycache__ creation
+import os
+os.environ['PYTHONDONTWRITEBYTECODE'] = '1'
 
 import argparse
 import sys
-import os
 from pathlib import Path
 from typing import List
 import json
@@ -235,6 +233,7 @@ Examples:
     parser.add_argument('--export', metavar='FILE', nargs='?', const='programs.json', help='Export program list to JSON')
     parser.add_argument('--config', action='store_true', help='Show configuration file location')
     parser.add_argument('--no-confirm', action='store_true', help='Skip confirmation prompts')
+    parser.add_argument('--verbose', action='store_true', help='Enable verbose output')
     
     args = parser.parse_args()
     

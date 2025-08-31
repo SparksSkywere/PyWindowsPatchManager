@@ -1,3 +1,7 @@
+# Prevent __pycache__ creation
+import os
+os.environ['PYTHONDONTWRITEBYTECODE'] = '1'
+
 import subprocess
 import threading
 import time
@@ -144,7 +148,8 @@ class UpdateInstaller:
                 capture_output=True,
                 text=True,
                 encoding='utf-8',
-                timeout=600  # 10 minute timeout
+                timeout=600,  # 10 minute timeout
+                creationflags=subprocess.CREATE_NO_WINDOW
             )
             
             success = result.returncode == 0
@@ -168,7 +173,8 @@ class UpdateInstaller:
                 capture_output=True,
                 text=True,
                 encoding='utf-8',
-                timeout=600
+                timeout=600,
+                creationflags=subprocess.CREATE_NO_WINDOW
             )
             
             success = result.returncode == 0

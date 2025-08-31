@@ -1,6 +1,28 @@
 # Windows Patch Manager GUI Launcher
 # Launches the GUI silently without showing console window
 
+# --- Admin check and UAC elevation ---
+function Test-Admin {
+    $currentUser = [Security.Principal.WindowsIdentity]::GetCurrent()
+    $principal = New-Object Security.Principal.WindowsPrincipal $currentUser
+    return $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+}
+
+if (-not (Test-Admin)) {
+    # Relaunch script as admin (UAC prompt)
+    $psi = New-Object System.Diagnostics.ProcessStartInfo
+    $psi.FileName = 'powershell.exe'
+    $psi.Arguments = "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`""
+    $psi.Verb = 'runas'
+    try {
+        [System.Diagnostics.Process]::Start($psi) | Out-Null
+    } catch {
+        # User cancelled UAC or error
+        exit 1
+    }
+    exit 0
+}
+
 # Hide PowerShell console window
 Add-Type -Name Window -Namespace Console -MemberDefinition '
 [DllImport("Kernel32.dll")]
@@ -13,6 +35,9 @@ public static extern bool ShowWindow(IntPtr hWnd, Int32 nCmdShow);
 $consolePtr = [Console.Window]::GetConsoleWindow()
 # Hide window (0 = SW_HIDE)
 [Console.Window]::ShowWindow($consolePtr, 0)
+
+# Set environment variable to prevent __pycache__ creation
+$env:PYTHONDONTWRITEBYTECODE = "1"
 
 # Get the script directory
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
